@@ -1,0 +1,18 @@
+:where(.css-dev-only-do-not-override-txh9fw).ant-float-btn-default {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+:where(.css-dev-only-do-not-override-txh9fw).ant-float-btn-default .ant-float-btn-body {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+:where(.css-dev-only-do-not-override-txh9fw).ant-float-btn-default
+  .ant-float-btn-body
+  .ant-float-btn-content
+  .ant-float-btn-description {
+  color: #ffffff;
+}
+
+.theme-icon {
+  fill: #ffffff;
+}
