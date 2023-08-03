@@ -9,8 +9,8 @@ export const BASE_POINTS_MAP = `${process.env.PUBLIC_URL}/gltf/png/`;
 export const POINTS_MAPS = [
   'baby-blue.png',
   'blue.png',
-  'blackish-green',
-  'fluorescence-green',
+  'blackish-green.png',
+  'fluorescence-green.png',
   'green.png',
   'white.png',
   'yellow.png',

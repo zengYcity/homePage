@@ -13,6 +13,15 @@
   color: #ffffff;
 }
 
+:where(.css-dev-only-do-not-override-txh9fw).ant-float-btn-primary .ant-float-btn-body {
+  background-color: rgba(22, 119, 255, 0.6);
+}
+
+:where(.css-dev-only-do-not-override-txh9fw).ant-float-btn-primary {
+  background-color: rgba(22, 119, 255, 0.2);
+}
+
 .theme-icon {
+  color: #ffffff;
   fill: #ffffff;
 }

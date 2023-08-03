@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FloatButton } from 'antd';
 import * as THREE from 'three';
-// import { ReactComponent as BackgroundIcon } from '../../../../assets/homePage/background.svg';
-import './index.css';
+import { ClockCircleOutlined } from '@ant-design/icons';
+import '../index.css';
 
 const themeMap = {
   lightBlue: '#000035',
@@ -13,7 +13,9 @@ const themeMap = {
   darkPurple: '#05030d',
 };
 
-const SwitchSceneBackground = ({ objects, render }) => {
+const SwitchSceneBackground = ({ objects, current, render }) => {
+  const [isAuto, setIsAuto] = useState(true);
+
   const getCanvasTexture = color => {
     const canvas = document.createElement('canvas');
     const width = window.innerWidth;
@@ -37,6 +39,16 @@ const SwitchSceneBackground = ({ objects, render }) => {
     render();
   }, [objects]);
 
+  useEffect(() => {
+    if (isAuto && objects) {
+      const { scene } = objects;
+      scene?.background?.dispose();
+      const color = Object.entries(themeMap)[THREE.MathUtils.randInt(0, 5)][1];
+      scene.background = getCanvasTexture(color);
+      render();
+    }
+  }, [current, objects]);
+
   const onThemeChange = theme => {
     if (!objects) return;
     const { scene } = objects;
@@ -46,7 +58,13 @@ const SwitchSceneBackground = ({ objects, render }) => {
   };
 
   return (
-    <FloatButton.Group shape="square">
+    <FloatButton.Group shape="square" style={{ right: 80 }}>
+      <FloatButton
+        type={isAuto ? 'primary' : 'default'}
+        icon={<ClockCircleOutlined className="theme-icon" />}
+        tooltip={isAuto ? '关闭自动随机切换背景' : '开启自动随机切换背景'}
+        onClick={() => setIsAuto(!isAuto)}
+      />
       <FloatButton description="暗蓝" onClick={() => onThemeChange('darkBlue')} />
       <FloatButton description="暗紫" onClick={() => onThemeChange('darkPurple')} />
       <FloatButton description="深蓝" onClick={() => onThemeChange('normalBlue')} />

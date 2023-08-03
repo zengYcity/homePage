@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import TWEEN from '@tweenjs/tween.js';
 import SwitchSceneBackground from './FloatButton/SwitchSceneBackground';
+import SwitchPointsMap from './FloatButton/SwitchPointsMap';
 import getPoints from '../utils/PointsUtil';
 import { GLTF_URLS } from './constant';
 import { loadGLTFLs } from '../utils/GLTFLoaderUtil';
@@ -10,6 +11,7 @@ import './index.css';
 
 const Index = () => {
   const [objects, setObjects] = useState(null);
+  const [current, setCurrent] = useState(0);
 
   const initBase = useCallback(() => {
     const scene = new THREE.Scene();
@@ -41,24 +43,29 @@ const Index = () => {
     }
   }, [objects]);
 
-  const loadAnimation = useCallback((points, gltfResults, current = 0) => {
-    const geometry = points?.geometry;
-    for (let i = 0, j = 0; i < gltfResults[3].length; i += 1, j += 1) {
-      if (j >= gltfResults[current].length) {
-        j = 0;
+  const loadAnimation = useCallback(
+    (points, gltfResults, loop = 0) => {
+      const geometry = points?.geometry;
+      for (let i = 0, j = 0; i < gltfResults[3].length; i += 1, j += 1) {
+        if (j >= gltfResults[loop].length) {
+          j = 0;
+        }
+        geometry.tween[i]
+          .to({ position: gltfResults[loop][j] }, THREE.MathUtils.randFloat(1000, 3000))
+          .onUpdate(({ position }) => {
+            geometry.attributes.position.array[i] = position;
+            geometry.attributes.position.needsUpdate = true;
+            geometry.tween[i] = new TWEEN.Tween({ position }).easing(TWEEN.Easing.Exponential.In);
+          })
+          .start();
       }
-      geometry.tween[i]
-        .to({ position: gltfResults[current][j] }, THREE.MathUtils.randFloat(1000, 3000))
-        .onUpdate(({ position }) => {
-          geometry.attributes.position.array[i] = position;
-          geometry.attributes.position.needsUpdate = true;
-          geometry.tween[i] = new TWEEN.Tween({ position }).easing(TWEEN.Easing.Exponential.In);
-        })
-        .start();
-    }
 
-    setTimeout(() => loadAnimation(points, gltfResults, (current + 1) % 4), 4000);
-  }, []);
+      const newLoop = (loop + 1) % 4;
+      setCurrent(newLoop);
+      setTimeout(() => loadAnimation(points, gltfResults, newLoop), 4000);
+    },
+    []
+  );
 
   const animate = useCallback(() => {
     // const { points } = objects;
@@ -85,14 +92,17 @@ const Index = () => {
     camera.updateProjectionMatrix();
   }, [objects]);
 
+  // 初始化
   useEffect(() => {
     initBase();
   }, []);
 
+  // 加载模型
   useEffect(() => {
     loadAllGLTFs();
   }, [objects]);
 
+  // 事件监听
   useEffect(() => {
     if (objects) {
       window.addEventListener('resize', onWindowResize);
@@ -107,7 +117,8 @@ const Index = () => {
   return (
     <>
       <div className="three-container" />
-      <SwitchSceneBackground objects={objects} render={render} />
+      <SwitchSceneBackground objects={objects} current={current} render={render} />
+      <SwitchPointsMap objects={objects} current={current} render={render} />
     </>
   );
 };
