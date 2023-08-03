@@ -18,7 +18,7 @@
   "scripts": {
     "start": "react-scripts start",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build -r https://github.com/zengYcity/react-app.git -b gh-pages",
+    "deploy": "gh-pages -d build -r https://github.com/zengYcity/zengYcity.github.io.git -b gh-pages",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

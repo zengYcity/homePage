@@ -19,7 +19,7 @@ const Index = () => {
       0.1,
       10000
     );
-    camera.position.set(0, 0, 5);
+    camera.position.set(0, 1, 5);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -48,7 +48,7 @@ const Index = () => {
         j = 0;
       }
       geometry.tween[i]
-        .to({ position: gltfResults[current][j] }, THREE.MathUtils.randFloat(1000, 4000))
+        .to({ position: gltfResults[current][j] }, THREE.MathUtils.randFloat(1000, 3000))
         .onUpdate(({ position }) => {
           geometry.attributes.position.array[i] = position;
           geometry.attributes.position.needsUpdate = true;
@@ -57,14 +57,14 @@ const Index = () => {
         .start();
     }
 
-    setTimeout(() => loadAnimation(points, gltfResults, (current + 1) % 4), 5000);
+    setTimeout(() => loadAnimation(points, gltfResults, (current + 1) % 4), 4000);
   }, []);
 
   const animate = useCallback(() => {
-    const { points } = objects;
-    points.rotation.x += 0.001;
-    points.rotation.y += 0.001;
-    points.rotation.z += 0.001;
+    // const { points } = objects;
+    // points.rotation.x += 0.0004;
+    // points.rotation.y += 0.0005;
+    // points.rotation.z += 0.0006;
     TWEEN.update();
     render();
     requestAnimationFrame(animate);

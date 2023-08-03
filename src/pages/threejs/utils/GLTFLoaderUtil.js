@@ -1,14 +1,20 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-export const loadGLTF = ({ url, loadingManager }, onLoad) => {
+export const loadGLTF = ({ url, loadingManager, index }, onLoad) => {
   if (!url) return;
   const params = loadingManager ? [loadingManager] : [];
   new GLTFLoader(...params).load(url, gltf => {
     gltf.scene.traverse(child => {
       if (child.isMesh) {
-        // 随机移动
-        // child.geometry.translate();
+        // 移动
+        const positions = [
+          [-3, 3, 0],
+          [0, -3, 0],
+          [3, 3, 0],
+          [0, 0, 0],
+        ];
+        child.geometry.translate(...positions[index]);
         // 缩放
         child.geometry.scale(0.4, 0.4, 0.4);
         // 旋转
@@ -26,8 +32,8 @@ export const loadGLTF = ({ url, loadingManager }, onLoad) => {
 export const loadGLTFLs = ({ urls }, onLoad) => {
   const loadingManager = new THREE.LoadingManager();
   const GLTFPositionList = [];
-  (urls || []).forEach(url => {
-    loadGLTF({ url, loadingManager }, positionList => {
+  (urls || []).forEach((url, index) => {
+    loadGLTF({ url, loadingManager, index }, positionList => {
       GLTFPositionList.push(positionList);
     });
   });
